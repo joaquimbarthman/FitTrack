@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_primary">#2F8CFF</color>
+    <color name="blue_primary_dark">#1565C0</color>
+    <color name="blue_soft">#EAF4FF</color>
+    <color name="blue_deep">#0C4DA2</color>
+    <color name="blue_tint">#D7E8FF</color>
+    <color name="gray_background">#F6F9FC</color>
+    <color name="gray_surface">#FFFFFF</color>
+    <color name="gray_surface_alt">#EEF4FA</color>
+    <color name="gray_border">#D6E1EE</color>
+    <color name="gray_text">#61758A</color>
+    <color name="gray_title">#16324F</color>
+    <color name="success">#2E7D32</color>
+    <color name="danger">#D84343</color>
+    <color name="gold">#FFD54F</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#FF000000</color>
+</resources>

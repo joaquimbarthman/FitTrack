@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">FitTrack</string>
+    <string name="login_title">Bem-vindo ao FitTrack</string>
+    <string name="login_subtitle">Organize seus treinos, acompanhe exercícios e mantenha sua rotina em dia.</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="nome">Nome</string>
+    <string name="entrar">Entrar</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="criar_conta">Criar conta</string>
+    <string name="ja_tem_conta">Já tem uma conta? Entrar</string>
+    <string name="nao_tem_conta">Ainda não tem cadastro? Criar conta</string>
+    <string name="cadastro_usuario">Cadastro de Usuário</string>
+    <string name="meus_treinos">Meus Treinos</string>
+    <string name="ola_usuario">Olá, %1$s</string>
+    <string name="sair">Sair</string>
+    <string name="adicionar_treino">Adicionar treino</string>
+    <string name="editar_treino">Editar treino</string>
+    <string name="nome_treino">Nome do treino</string>
+    <string name="dia_semana">Dia da semana</string>
+    <string name="salvar">Salvar</string>
+    <string name="exercicios_treino">Exercícios do treino</string>
+    <string name="adicionar_exercicio">Adicionar exercício</string>
+    <string name="editar_exercicio">Editar exercício</string>
+    <string name="nome_exercicio">Nome do exercício</string>
+    <string name="series">Séries</string>
+    <string name="repeticoes">Repetições</string>
+    <string name="peso">Peso (kg)</string>
+    <string name="sem_treinos">Nenhum treino cadastrado ainda. Toque no botão + para adicionar o primeiro.</string>
+    <string name="sem_exercicios">Nenhum exercício cadastrado neste treino. Toque no botão + para adicionar.</string>
+    <string name="acao_editar">Editar</string>
+    <string name="acao_excluir">Excluir</string>
+    <string name="confirmar_exclusao_treino">Deseja excluir este treino e todos os exercícios vinculados?</string>
+    <string name="confirmar_exclusao_exercicio">Deseja excluir este exercício?</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="dia_item">Dia: %1$s</string>
+    <string name="series_item">%1$d séries</string>
+    <string name="repeticoes_item">%1$d repetições</string>
+    <string name="peso_item">Carga: %1$.1f kg</string>
+    <string name="treino_obrigatorio">Informe o nome do treino e o dia da semana.</string>
+    <string name="exercicio_obrigatorio">Preencha todos os campos do exercício.</string>
+    <string name="usuario_obrigatorio">Preencha nome, e-mail e senha.</string>
+    <string name="login_obrigatorio">Informe e-mail e senha.</string>
+    <string name="login_invalido">E-mail ou senha inválidos.</string>
+    <string name="cadastro_sucesso">Usuário cadastrado com sucesso.</string>
+    <string name="email_existente">Já existe um usuário com este e-mail.</string>
+    <string name="treino_salvo">Treino salvo com sucesso.</string>
+    <string name="treino_atualizado">Treino atualizado com sucesso.</string>
+    <string name="treino_excluido">Treino excluído.</string>
+    <string name="exercicio_salvo">Exercício salvo com sucesso.</string>
+    <string name="exercicio_atualizado">Exercício atualizado com sucesso.</string>
+    <string name="exercicio_excluido">Exercício excluído.</string>
+    <string name="usuario_inicial">Atleta</string>
+    <string-array name="dias_semana">
+        <item>Segunda-feira</item>
+        <item>Terça-feira</item>
+        <item>Quarta-feira</item>
+        <item>Quinta-feira</item>
+        <item>Sexta-feira</item>
+        <item>Sábado</item>
+        <item>Domingo</item>
+    </string-array>
+</resources>
