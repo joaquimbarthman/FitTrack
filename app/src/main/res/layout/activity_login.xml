@@ -94,8 +94,7 @@
                         android:layout_marginTop="24dp"
                         app:boxBackgroundColor="@android:color/transparent"
                         app:boxBackgroundMode="filled"
-                        app:boxStrokeWidth="0dp"
-                        app:startIconDrawable="@drawable/ic_email">
+                        app:boxStrokeWidth="0dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edtEmailLogin"
@@ -115,8 +114,7 @@
                         android:layout_marginTop="12dp"
                         app:boxBackgroundColor="@android:color/transparent"
                         app:boxBackgroundMode="filled"
-                        app:boxStrokeWidth="0dp"
-                        app:startIconDrawable="@drawable/ic_lock">
+                        app:boxStrokeWidth="0dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edtSenhaLogin"
