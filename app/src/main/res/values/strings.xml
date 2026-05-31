@@ -43,6 +43,7 @@
     <string name="login_obrigatorio">Informe e-mail e senha.</string>
     <string name="login_invalido">E-mail ou senha inválidos.</string>
     <string name="cadastro_sucesso">Usuário cadastrado com sucesso.</string>
+    <string name="erro_firebase">Falha ao salvar dados no Firebase. Verifique sua conexão.</string>
     <string name="email_existente">Já existe um usuário com este e-mail.</string>
     <string name="treino_salvo">Treino salvo com sucesso.</string>
     <string name="treino_atualizado">Treino atualizado com sucesso.</string>
@@ -59,5 +60,48 @@
         <item>Sexta-feira</item>
         <item>Sábado</item>
         <item>Domingo</item>
+    </string-array>
+
+    <string name="objetivos">Objetivos</string>
+    <string name="adicionar_objetivo">Adicionar objetivo</string>
+    <string name="editar_objetivo">Editar objetivo</string>
+    <string name="novo_objetivo">Meta pessoal</string>
+    <string name="tipo_objetivo">Tipo de objetivo</string>
+    <string name="descricao_objetivo">Descrição</string>
+    <string name="valor_meta">Valor da meta</string>
+    <string name="data_inicio">Data início</string>
+    <string name="data_fim">Data fim</string>
+    <string name="status">Status</string>
+    <string name="sem_objetivos">Nenhum objetivo cadastrado ainda. Toque no + para adicionar o primeiro.</string>
+    <string name="objetivo_salvo">Objetivo salvo com sucesso.</string>
+    <string name="objetivo_atualizado">Objetivo atualizado com sucesso.</string>
+    <string name="objetivo_excluido">Objetivo excluído.</string>
+    <string name="objetivo_obrigatorio">Preencha tipo, data e status do objetivo.</string>
+    <string name="periodo_item">%1$s - %2$s</string>
+    <string name="valor_meta_item">Meta: %1$s</string>
+    <string name="sem_data_fim">Sem data fim</string>
+
+    <string name="progresso">Progresso</string>
+    <string name="adicionar_progresso">Adicionar progresso</string>
+    <string name="editar_progresso">Editar progresso</string>
+    <string name="novo_progresso">Registro de acompanhamento</string>
+    <string name="data_registro">Data do registro</string>
+    <string name="gordura">Gordura (%)</string>
+    <string name="cintura">Cintura (cm)</string>
+    <string name="quadril">Quadril (cm)</string>
+    <string name="peito">Peito (cm)</string>
+    <string name="notas">Notas</string>
+    <string name="sem_progresso">Nenhum registro de progresso ainda. Toque no + para adicionar.</string>
+    <string name="progresso_salvo">Progresso salvo com sucesso.</string>
+    <string name="progresso_atualizado">Progresso atualizado com sucesso.</string>
+    <string name="progresso_excluido">Registro de progresso excluído.</string>
+    <string name="progresso_obrigatorio">Preencha data e peso para salvar o progresso.</string>
+    <string name="peso_item_progresso">Peso: %1$.1f kg</string>
+    <string name="medidas_item_progresso">Gordura: %1$.1f%% • Cintura: %2$.1f cm • Quadril: %3$.1f cm • Peito: %4$.1f cm</string>
+
+    <string-array name="status_opcoes">
+        <item>Ativo</item>
+        <item>Concluído</item>
+        <item>Cancelado</item>
     </string-array>
 </resources>

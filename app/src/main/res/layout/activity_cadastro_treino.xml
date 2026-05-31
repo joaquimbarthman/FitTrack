@@ -64,7 +64,7 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:contentDescription="@string/adicionar_treino"
-                    android:src="@drawable/ic_trophy"
+                    android:src="@drawable/ic_flag"
                     app:tint="@color/blue_primary_dark" />
             </FrameLayout>
         </LinearLayout>

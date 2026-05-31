@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import com.fittrack.model.Exercicio;
+import com.fittrack.model.Objetivo;
+import com.fittrack.model.Progresso;
 import com.fittrack.model.Treino;
 import com.fittrack.model.Usuario;
 
@@ -18,11 +20,13 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "fittrack.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String TABELA_USUARIO = "Usuario";
     private static final String TABELA_TREINO = "Treino";
     private static final String TABELA_EXERCICIO = "Exercicio";
+    private static final String TABELA_OBJETIVO = "Objetivo";
+    private static final String TABELA_PROGRESSO = "Progresso";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,12 +61,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "peso REAL NOT NULL," +
                 "idTreino INTEGER NOT NULL," +
                 "FOREIGN KEY(idTreino) REFERENCES " + TABELA_TREINO + "(idTreino) ON DELETE CASCADE)");
+
+        db.execSQL("CREATE TABLE " + TABELA_OBJETIVO + " (" +
+                "idObjetivo INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "tipoObjetivo TEXT NOT NULL," +
+                "descricao TEXT," +
+                "valorMeta TEXT," +
+                "dataInicio TEXT NOT NULL," +
+                "dataFim TEXT," +
+                "status TEXT NOT NULL," +
+                "idUsuario INTEGER NOT NULL," +
+                "FOREIGN KEY(idUsuario) REFERENCES " + TABELA_USUARIO + "(idUsuario) ON DELETE CASCADE)");
+
+        db.execSQL("CREATE TABLE " + TABELA_PROGRESSO + " (" +
+                "idProgresso INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "dataRegistro TEXT NOT NULL," +
+                "peso REAL," +
+                "gordura REAL," +
+                "cintura REAL," +
+                "quadril REAL," +
+                "peito REAL," +
+                "notas TEXT," +
+                "idUsuario INTEGER NOT NULL," +
+                "FOREIGN KEY(idUsuario) REFERENCES " + TABELA_USUARIO + "(idUsuario) ON DELETE CASCADE)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABELA_EXERCICIO);
         db.execSQL("DROP TABLE IF EXISTS " + TABELA_TREINO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABELA_OBJETIVO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABELA_PROGRESSO);
         db.execSQL("DROP TABLE IF EXISTS " + TABELA_USUARIO);
         onCreate(db);
     }
@@ -217,6 +246,151 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return exercicios;
+    }
+
+    public long inserirObjetivo(Objetivo objetivo) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("tipoObjetivo", objetivo.getTipoObjetivo());
+        values.put("descricao", objetivo.getDescricao());
+        values.put("valorMeta", objetivo.getValorMeta());
+        values.put("dataInicio", objetivo.getDataInicio());
+        values.put("dataFim", objetivo.getDataFim());
+        values.put("status", objetivo.getStatus());
+        values.put("idUsuario", objetivo.getIdUsuario());
+        return db.insert(TABELA_OBJETIVO, null, values);
+    }
+
+    public int atualizarObjetivo(Objetivo objetivo) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("tipoObjetivo", objetivo.getTipoObjetivo());
+        values.put("descricao", objetivo.getDescricao());
+        values.put("valorMeta", objetivo.getValorMeta());
+        values.put("dataInicio", objetivo.getDataInicio());
+        values.put("dataFim", objetivo.getDataFim());
+        values.put("status", objetivo.getStatus());
+        return db.update(TABELA_OBJETIVO, values, "idObjetivo = ?", new String[]{String.valueOf(objetivo.getIdObjetivo())});
+    }
+
+    public int excluirObjetivo(int idObjetivo) {
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(TABELA_OBJETIVO, "idObjetivo = ?", new String[]{String.valueOf(idObjetivo)});
+    }
+
+    public Objetivo buscarObjetivoPorId(int idObjetivo) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABELA_OBJETIVO + " WHERE idObjetivo = ?",
+                new String[]{String.valueOf(idObjetivo)}
+        );
+        Objetivo objetivo = null;
+        if (cursor.moveToFirst()) {
+            objetivo = cursorToObjetivo(cursor);
+        }
+        cursor.close();
+        return objetivo;
+    }
+
+    public List<Objetivo> listarObjetivosPorUsuario(int idUsuario) {
+        List<Objetivo> objetivos = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABELA_OBJETIVO + " WHERE idUsuario = ? ORDER BY dataInicio",
+                new String[]{String.valueOf(idUsuario)}
+        );
+        while (cursor.moveToNext()) {
+            objetivos.add(cursorToObjetivo(cursor));
+        }
+        cursor.close();
+        return objetivos;
+    }
+
+    public long inserirProgresso(Progresso progresso) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("dataRegistro", progresso.getDataRegistro());
+        values.put("peso", progresso.getPeso());
+        values.put("gordura", progresso.getGordura());
+        values.put("cintura", progresso.getCintura());
+        values.put("quadril", progresso.getQuadril());
+        values.put("peito", progresso.getPeito());
+        values.put("notas", progresso.getNotas());
+        values.put("idUsuario", progresso.getIdUsuario());
+        return db.insert(TABELA_PROGRESSO, null, values);
+    }
+
+    public int atualizarProgresso(Progresso progresso) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("dataRegistro", progresso.getDataRegistro());
+        values.put("peso", progresso.getPeso());
+        values.put("gordura", progresso.getGordura());
+        values.put("cintura", progresso.getCintura());
+        values.put("quadril", progresso.getQuadril());
+        values.put("peito", progresso.getPeito());
+        values.put("notas", progresso.getNotas());
+        return db.update(TABELA_PROGRESSO, values, "idProgresso = ?", new String[]{String.valueOf(progresso.getIdProgresso())});
+    }
+
+    public int excluirProgresso(int idProgresso) {
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(TABELA_PROGRESSO, "idProgresso = ?", new String[]{String.valueOf(idProgresso)});
+    }
+
+    public Progresso buscarProgressoPorId(int idProgresso) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABELA_PROGRESSO + " WHERE idProgresso = ?",
+                new String[]{String.valueOf(idProgresso)}
+        );
+        Progresso progresso = null;
+        if (cursor.moveToFirst()) {
+            progresso = cursorToProgresso(cursor);
+        }
+        cursor.close();
+        return progresso;
+    }
+
+    public List<Progresso> listarProgressoPorUsuario(int idUsuario) {
+        List<Progresso> progressoList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABELA_PROGRESSO + " WHERE idUsuario = ? ORDER BY dataRegistro DESC",
+                new String[]{String.valueOf(idUsuario)}
+        );
+        while (cursor.moveToNext()) {
+            progressoList.add(cursorToProgresso(cursor));
+        }
+        cursor.close();
+        return progressoList;
+    }
+
+    private Objetivo cursorToObjetivo(Cursor cursor) {
+        return new Objetivo(
+                cursor.getInt(cursor.getColumnIndexOrThrow("idObjetivo")),
+                cursor.getString(cursor.getColumnIndexOrThrow("tipoObjetivo")),
+                cursor.getString(cursor.getColumnIndexOrThrow("descricao")),
+                cursor.getString(cursor.getColumnIndexOrThrow("valorMeta")),
+                cursor.getString(cursor.getColumnIndexOrThrow("dataInicio")),
+                cursor.getString(cursor.getColumnIndexOrThrow("dataFim")),
+                cursor.getString(cursor.getColumnIndexOrThrow("status")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("idUsuario"))
+        );
+    }
+
+    private Progresso cursorToProgresso(Cursor cursor) {
+        return new Progresso(
+                cursor.getInt(cursor.getColumnIndexOrThrow("idProgresso")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("idUsuario")),
+                cursor.getString(cursor.getColumnIndexOrThrow("dataRegistro")),
+                cursor.getDouble(cursor.getColumnIndexOrThrow("peso")),
+                cursor.getDouble(cursor.getColumnIndexOrThrow("gordura")),
+                cursor.getDouble(cursor.getColumnIndexOrThrow("cintura")),
+                cursor.getDouble(cursor.getColumnIndexOrThrow("quadril")),
+                cursor.getDouble(cursor.getColumnIndexOrThrow("peito")),
+                cursor.getString(cursor.getColumnIndexOrThrow("notas"))
+        );
     }
 
     private Usuario cursorToUsuario(Cursor cursor) {

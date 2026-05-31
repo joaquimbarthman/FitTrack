@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fittrack.data.DatabaseHelper;
+import com.fittrack.data.FirebaseRepository;
 import com.fittrack.model.Usuario;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -62,10 +63,24 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         usuario.setNome(nome);
         usuario.setEmail(email);
         usuario.setSenha(senha);
-        databaseHelper.inserirUsuario(usuario);
+        long id = databaseHelper.inserirUsuario(usuario);
+        usuario.setIdUsuario((int) id);
 
-        Toast.makeText(this, R.string.cadastro_sucesso, Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        FirebaseRepository firebaseRepository = new FirebaseRepository(this);
+        firebaseRepository.salvarUsuario(usuario, new FirebaseRepository.ResultCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                Toast.makeText(CadastroUsuarioActivity.this, R.string.cadastro_sucesso, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(CadastroUsuarioActivity.this, LoginActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(CadastroUsuarioActivity.this, R.string.erro_firebase, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(CadastroUsuarioActivity.this, LoginActivity.class));
+                finish();
+            }
+        });
     }
 }

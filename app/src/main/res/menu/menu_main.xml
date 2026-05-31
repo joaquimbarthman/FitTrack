@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_objetivos"
+        android:title="@string/objetivos"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_progresso"
+        android:title="@string/progresso"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_logout"
         android:title="@string/sair"
         app:showAsAction="never" />

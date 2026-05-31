@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarCadastroExercicio"
+        android:id="@+id/toolbarCadastroObjetivo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/transparent"
@@ -17,7 +17,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +45,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/app_name"
+                        android:text="@string/novo_objetivo"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -51,9 +53,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="@string/nome_exercicio"
+                        android:text="@string/adicionar_objetivo"
                         android:textColor="@color/white"
-                        android:textSize="24sp"
+                        android:textSize="22sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -67,8 +69,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
-                        android:contentDescription="@string/adicionar_exercicio"
-                        android:src="@drawable/ic_exercise"
+                        android:contentDescription="@string/adicionar_objetivo"
+                        android:src="@drawable/ic_goal"
                         app:tint="@color/blue_primary_dark" />
                 </FrameLayout>
             </LinearLayout>
@@ -91,16 +93,15 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxBackgroundColor="@android:color/transparent"
                         app:boxBackgroundMode="filled"
                         app:boxStrokeWidth="0dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtNomeExercicio"
+                            android:id="@+id/edtTipoObjetivo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_input"
-                            android:hint="@string/nome_exercicio"
+                            android:hint="@string/tipo_objetivo"
                             android:padding="16dp"
                             android:textColor="@color/gray_title"
                             android:textColorHint="@color/gray_text" />
@@ -109,18 +110,16 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_marginTop="14dp"
                         app:boxBackgroundMode="filled"
                         app:boxStrokeWidth="0dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtSeries"
+                            android:id="@+id/edtDescricaoObjetivo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_input"
-                            android:hint="@string/series"
-                            android:inputType="number"
+                            android:hint="@string/descricao_objetivo"
                             android:padding="16dp"
                             android:textColor="@color/gray_title"
                             android:textColorHint="@color/gray_text" />
@@ -129,18 +128,16 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_marginTop="14dp"
                         app:boxBackgroundMode="filled"
                         app:boxStrokeWidth="0dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtRepeticoes"
+                            android:id="@+id/edtValorMeta"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_input"
-                            android:hint="@string/repeticoes"
-                            android:inputType="number"
+                            android:hint="@string/valor_meta"
                             android:padding="16dp"
                             android:textColor="@color/gray_title"
                             android:textColorHint="@color/gray_text" />
@@ -149,36 +146,83 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_marginTop="14dp"
                         app:boxBackgroundMode="filled"
                         app:boxStrokeWidth="0dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edtPeso"
+                            android:id="@+id/edtDataInicio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_input"
-                            android:hint="@string/peso"
-                            android:inputType="numberDecimal"
+                            android:hint="@string/data_inicio"
                             android:padding="16dp"
                             android:textColor="@color/gray_title"
                             android:textColorHint="@color/gray_text" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/btnSalvarExercicio"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:boxBackgroundMode="filled"
+                        app:boxStrokeWidth="0dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtDataFim"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_input"
+                            android:hint="@string/data_fim"
+                            android:padding="16dp"
+                            android:textColor="@color/gray_title"
+                            android:textColorHint="@color/gray_text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:boxBackgroundMode="filled"
+                        app:boxStrokeWidth="0dp"
+                        app:endIconMode="dropdown_menu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/autoStatusObjetivo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_input"
+                            android:hint="@string/status"
+                            android:inputType="none"
+                            android:padding="16dp"
+                            android:textColor="@color/gray_title"
+                            android:textColorHint="@color/gray_text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSalvarObjetivo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_primary_button"
-                        android:elevation="2dp"
                         android:paddingVertical="16dp"
                         android:text="@string/salvar"
                         android:textAllCaps="false"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        app:backgroundTint="@color/blue_primary" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 </LinearLayout>

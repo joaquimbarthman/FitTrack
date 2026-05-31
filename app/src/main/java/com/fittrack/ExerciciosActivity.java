@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fittrack.adapter.ExercicioAdapter;
 import com.fittrack.data.DatabaseHelper;
+import com.fittrack.data.FirebaseRepository;
 import com.fittrack.model.Exercicio;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -68,9 +69,21 @@ public class ExerciciosActivity extends AppCompatActivity implements ExercicioAd
     }
 
     private void carregarExercicios() {
-        List<Exercicio> exercicios = databaseHelper.listarExerciciosPorTreino(idTreino);
-        exercicioAdapter.atualizarLista(exercicios);
-        txtEmpty.setVisibility(exercicios.isEmpty() ? View.VISIBLE : View.GONE);
+        FirebaseRepository firebaseRepository = new FirebaseRepository(this);
+        firebaseRepository.listarExercicios(idTreino, new FirebaseRepository.ResultCallback<List<Exercicio>>() {
+            @Override
+            public void onSuccess(List<Exercicio> result) {
+                exercicioAdapter.atualizarLista(result);
+                txtEmpty.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                List<Exercicio> exercicios = databaseHelper.listarExerciciosPorTreino(idTreino);
+                exercicioAdapter.atualizarLista(exercicios);
+                txtEmpty.setVisibility(exercicios.isEmpty() ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     @Override
@@ -88,9 +101,23 @@ public class ExerciciosActivity extends AppCompatActivity implements ExercicioAd
                 .setTitle(R.string.acao_excluir)
                 .setMessage(R.string.confirmar_exclusao_exercicio)
                 .setPositiveButton(R.string.acao_excluir, (dialog, which) -> {
-                    databaseHelper.excluirExercicio(exercicio.getIdExercicio());
-                    Toast.makeText(this, R.string.exercicio_excluido, Toast.LENGTH_SHORT).show();
-                    carregarExercicios();
+                    int resultado = databaseHelper.excluirExercicio(exercicio.getIdExercicio());
+                    if (resultado > 0) {
+                        FirebaseRepository firebaseRepository = new FirebaseRepository(ExerciciosActivity.this);
+                        firebaseRepository.excluirExercicio(exercicio.getIdExercicio(), new FirebaseRepository.ResultCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void result) {
+                                // sincronizado
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                Toast.makeText(ExerciciosActivity.this, R.string.erro_firebase, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        Toast.makeText(this, R.string.exercicio_excluido, Toast.LENGTH_SHORT).show();
+                        carregarExercicios();
+                    }
                 })
                 .setNegativeButton(R.string.cancelar, null)
                 .show();

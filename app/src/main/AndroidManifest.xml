@@ -24,6 +24,18 @@
             android:name=".CadastroUsuarioActivity"
             android:exported="false" />
         <activity
+            android:name=".CadastroObjetivoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ObjetivosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CadastroProgressoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProgressoActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

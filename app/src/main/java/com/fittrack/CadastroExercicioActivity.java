@@ -8,8 +8,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fittrack.data.DatabaseHelper;
+import com.fittrack.data.FirebaseRepository;
 import com.fittrack.model.Exercicio;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.fittrack.util.ValidationUtils;
 
 public class CadastroExercicioActivity extends AppCompatActivity {
 
@@ -68,8 +70,27 @@ public class CadastroExercicioActivity extends AppCompatActivity {
         String textoRepeticoes = edtRepeticoes.getText().toString().trim();
         String textoPeso = edtPeso.getText().toString().trim();
 
-        if (nome.isEmpty() || textoSeries.isEmpty() || textoRepeticoes.isEmpty() || textoPeso.isEmpty()) {
-            Toast.makeText(this, R.string.exercicio_obrigatorio, Toast.LENGTH_SHORT).show();
+        if (!ValidationUtils.isNotEmpty(nome)) {
+            edtNomeExercicio.setError(getString(R.string.exercicio_obrigatorio));
+            edtNomeExercicio.requestFocus();
+            return;
+        }
+
+        if (!ValidationUtils.isPositiveInt(textoSeries)) {
+            edtSeries.setError(getString(R.string.exercicio_obrigatorio));
+            edtSeries.requestFocus();
+            return;
+        }
+
+        if (!ValidationUtils.isPositiveInt(textoRepeticoes)) {
+            edtRepeticoes.setError(getString(R.string.exercicio_obrigatorio));
+            edtRepeticoes.requestFocus();
+            return;
+        }
+
+        if (!ValidationUtils.isPositiveDouble(textoPeso)) {
+            edtPeso.setError(getString(R.string.exercicio_obrigatorio));
+            edtPeso.requestFocus();
             return;
         }
 
@@ -80,12 +101,36 @@ public class CadastroExercicioActivity extends AppCompatActivity {
         exercicio.setPeso(Double.parseDouble(textoPeso));
         exercicio.setIdTreino(idTreino);
 
+        FirebaseRepository firebaseRepository = new FirebaseRepository(this);
         if (modoEdicao) {
             exercicio.setIdExercicio(idExercicio);
             databaseHelper.atualizarExercicio(exercicio);
+            firebaseRepository.salvarExercicio(exercicio, new FirebaseRepository.ResultCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    // sincronizado
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(CadastroExercicioActivity.this, R.string.erro_firebase, Toast.LENGTH_SHORT).show();
+                }
+            });
             Toast.makeText(this, R.string.exercicio_atualizado, Toast.LENGTH_SHORT).show();
         } else {
-            databaseHelper.inserirExercicio(exercicio);
+            long id = databaseHelper.inserirExercicio(exercicio);
+            exercicio.setIdExercicio((int) id);
+            firebaseRepository.salvarExercicio(exercicio, new FirebaseRepository.ResultCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    // sincronizado
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(CadastroExercicioActivity.this, R.string.erro_firebase, Toast.LENGTH_SHORT).show();
+                }
+            });
             Toast.makeText(this, R.string.exercicio_salvo, Toast.LENGTH_SHORT).show();
         }
 

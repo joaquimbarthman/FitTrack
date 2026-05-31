@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,9 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fittrack.adapter.TreinoAdapter;
 import com.fittrack.data.DatabaseHelper;
+import com.fittrack.data.FirebaseRepository;
 import com.fittrack.model.Treino;
 import com.fittrack.model.Usuario;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -61,14 +64,36 @@ public class MainActivity extends AppCompatActivity implements TreinoAdapter.OnT
         txtBoasVindas = findViewById(R.id.txtBoasVindas);
         txtEmpty = findViewById(R.id.txtEmptyTreinos);
         RecyclerView recyclerView = findViewById(R.id.recyclerTreinos);
+        Button btnObjetivos = findViewById(R.id.btnObjetivos);
+        Button btnProgresso = findViewById(R.id.btnProgresso);
         FloatingActionButton fabAdicionar = findViewById(R.id.fabAdicionarTreino);
 
         treinoAdapter = new TreinoAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(treinoAdapter);
 
+        btnObjetivos.setOnClickListener(v -> startActivity(new Intent(this, ObjetivosActivity.class)));
+        btnProgresso.setOnClickListener(v -> startActivity(new Intent(this, ProgressoActivity.class)));
         fabAdicionar.setOnClickListener(v ->
                 treinoLauncher.launch(new Intent(this, CadastroTreinoActivity.class)));
+
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
+        bottomNavigation.setSelectedItemId(R.id.nav_home);
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                return true;
+            } else if (itemId == R.id.nav_objetivos) {
+                startActivity(new Intent(this, ObjetivosActivity.class));
+                finish();
+                return true;
+            } else if (itemId == R.id.nav_progresso) {
+                startActivity(new Intent(this, ProgressoActivity.class));
+                finish();
+                return true;
+            }
+            return false;
+        });
 
         carregarCabecalho();
     }
@@ -86,9 +111,21 @@ public class MainActivity extends AppCompatActivity implements TreinoAdapter.OnT
     }
 
     private void carregarTreinos() {
-        List<Treino> treinos = databaseHelper.listarTreinosPorUsuario(idUsuarioLogado);
-        treinoAdapter.atualizarLista(treinos);
-        txtEmpty.setVisibility(treinos.isEmpty() ? View.VISIBLE : View.GONE);
+        FirebaseRepository firebaseRepository = new FirebaseRepository(this);
+        firebaseRepository.listarTreinos(new FirebaseRepository.ResultCallback<List<Treino>>() {
+            @Override
+            public void onSuccess(List<Treino> result) {
+                treinoAdapter.atualizarLista(result);
+                txtEmpty.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                List<Treino> treinos = databaseHelper.listarTreinosPorUsuario(idUsuarioLogado);
+                treinoAdapter.atualizarLista(treinos);
+                txtEmpty.setVisibility(treinos.isEmpty() ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     private void redirecionarLogin() {
@@ -104,9 +141,19 @@ public class MainActivity extends AppCompatActivity implements TreinoAdapter.OnT
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_logout) {
+        int id = item.getItemId();
+        if (id == R.id.action_objetivos) {
+            startActivity(new Intent(this, ObjetivosActivity.class));
+            return true;
+        } else if (id == R.id.action_progresso) {
+            startActivity(new Intent(this, ProgressoActivity.class));
+            return true;
+        } else if (id == R.id.action_logout) {
             SharedPreferences preferences = getSharedPreferences(LoginActivity.PREFS_NAME, MODE_PRIVATE);
-            preferences.edit().remove(LoginActivity.KEY_USER_ID).apply();
+            preferences.edit()
+                    .remove(LoginActivity.KEY_USER_ID)
+                    .remove(LoginActivity.KEY_USER_EMAIL)
+                    .apply();
             redirecionarLogin();
             return true;
         }
@@ -135,9 +182,23 @@ public class MainActivity extends AppCompatActivity implements TreinoAdapter.OnT
                 .setTitle(R.string.acao_excluir)
                 .setMessage(R.string.confirmar_exclusao_treino)
                 .setPositiveButton(R.string.acao_excluir, (dialog, which) -> {
-                    databaseHelper.excluirTreino(treino.getIdTreino());
-                    Toast.makeText(this, R.string.treino_excluido, Toast.LENGTH_SHORT).show();
-                    carregarTreinos();
+                    int resultado = databaseHelper.excluirTreino(treino.getIdTreino());
+                    if (resultado > 0) {
+                        FirebaseRepository firebaseRepository = new FirebaseRepository(MainActivity.this);
+                        firebaseRepository.excluirTreino(treino.getIdTreino(), new FirebaseRepository.ResultCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void result) {
+                                // sincronização concluída
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                Toast.makeText(MainActivity.this, R.string.erro_firebase, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        Toast.makeText(this, R.string.treino_excluido, Toast.LENGTH_SHORT).show();
+                        carregarTreinos();
+                    }
                 })
                 .setNegativeButton(R.string.cancelar, null)
                 .show();

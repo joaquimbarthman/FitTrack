@@ -9,9 +9,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fittrack.data.DatabaseHelper;
+import com.fittrack.data.FirebaseRepository;
 import com.fittrack.model.Treino;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.fittrack.util.ValidationUtils;
 
 public class CadastroTreinoActivity extends AppCompatActivity {
 
@@ -66,8 +68,15 @@ public class CadastroTreinoActivity extends AppCompatActivity {
         String nomeTreino = edtNomeTreino.getText().toString().trim();
         String diaSemana = autoDiaSemana.getText().toString().trim();
 
-        if (nomeTreino.isEmpty() || diaSemana.isEmpty()) {
-            Toast.makeText(this, R.string.treino_obrigatorio, Toast.LENGTH_SHORT).show();
+        if (!ValidationUtils.isNotEmpty(nomeTreino)) {
+            edtNomeTreino.setError(getString(R.string.treino_obrigatorio));
+            edtNomeTreino.requestFocus();
+            return;
+        }
+
+        if (!ValidationUtils.isNotEmpty(diaSemana)) {
+            autoDiaSemana.setError(getString(R.string.treino_obrigatorio));
+            autoDiaSemana.requestFocus();
             return;
         }
 
@@ -75,15 +84,37 @@ public class CadastroTreinoActivity extends AppCompatActivity {
         treino.setNomeTreino(nomeTreino);
         treino.setDiaSemana(diaSemana);
 
+        FirebaseRepository firebaseRepository = new FirebaseRepository(this);
         if (modoEdicao) {
             treino.setIdTreino(idTreino);
             databaseHelper.atualizarTreino(treino);
+            firebaseRepository.salvarTreino(treino, new FirebaseRepository.ResultCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    // sincronizado
+                }
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(CadastroTreinoActivity.this, R.string.erro_firebase, Toast.LENGTH_SHORT).show();
+                }
+            });
             Toast.makeText(this, R.string.treino_atualizado, Toast.LENGTH_SHORT).show();
         } else {
             int idUsuario = getSharedPreferences(LoginActivity.PREFS_NAME, MODE_PRIVATE)
                     .getInt(LoginActivity.KEY_USER_ID, -1);
             treino.setIdUsuario(idUsuario);
-            databaseHelper.inserirTreino(treino);
+            long id = databaseHelper.inserirTreino(treino);
+            treino.setIdTreino((int) id);
+            firebaseRepository.salvarTreino(treino, new FirebaseRepository.ResultCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    // sincronizado
+                }
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(CadastroTreinoActivity.this, R.string.erro_firebase, Toast.LENGTH_SHORT).show();
+                }
+            });
             Toast.makeText(this, R.string.treino_salvo, Toast.LENGTH_SHORT).show();
         }
 
