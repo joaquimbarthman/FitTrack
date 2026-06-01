@@ -1,11 +1,17 @@
 package com.fittrack;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import com.fittrack.data.DatabaseHelper;
 import com.fittrack.data.FirebaseRepository;
@@ -22,6 +28,7 @@ public class CadastroProgressoActivity extends AppCompatActivity {
     private EditText edtQuadril;
     private EditText edtPeito;
     private EditText edtNotas;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private DatabaseHelper databaseHelper;
     private boolean modoEdicao;
     private int idProgresso;
@@ -48,6 +55,8 @@ public class CadastroProgressoActivity extends AppCompatActivity {
         edtNotas = findViewById(R.id.edtNotas);
         Button btnSalvar = findViewById(R.id.btnSalvarProgresso);
 
+        setupDateField(edtDataRegistro);
+
         if (modoEdicao && idProgresso != -1) {
             preencherCampos();
         }
@@ -69,6 +78,34 @@ public class CadastroProgressoActivity extends AppCompatActivity {
         edtQuadril.setText(String.valueOf(progresso.getQuadril()));
         edtPeito.setText(String.valueOf(progresso.getPeito()));
         edtNotas.setText(progresso.getNotas());
+    }
+
+    private void setupDateField(EditText editText) {
+        editText.setOnClickListener(v -> showDatePicker(editText));
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                showDatePicker(editText);
+            }
+        });
+    }
+
+    private void showDatePicker(EditText editText) {
+        Calendar calendar = Calendar.getInstance();
+        String currentValue = editText.getText().toString().trim();
+        if (!currentValue.isEmpty()) {
+            try {
+                calendar.setTime(dateFormat.parse(currentValue));
+            } catch (ParseException ignored) {
+            }
+        }
+
+        new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> editText.setText(String.format(Locale.getDefault(), "%02d/%02d/%04d", dayOfMonth, month + 1, year)),
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
     }
 
     private void salvarProgresso() {

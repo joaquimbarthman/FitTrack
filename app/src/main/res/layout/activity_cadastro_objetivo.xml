@@ -156,6 +156,9 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_input"
                             android:hint="@string/data_inicio"
+                            android:inputType="none"
+                            android:focusable="false"
+                            android:clickable="true"
                             android:padding="16dp"
                             android:textColor="@color/gray_title"
                             android:textColorHint="@color/gray_text" />
@@ -174,6 +177,9 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_input"
                             android:hint="@string/data_fim"
+                            android:inputType="none"
+                            android:focusable="false"
+                            android:clickable="true"
                             android:padding="16dp"
                             android:textColor="@color/gray_title"
                             android:textColorHint="@color/gray_text" />

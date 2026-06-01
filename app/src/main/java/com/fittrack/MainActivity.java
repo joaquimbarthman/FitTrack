@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,16 +63,12 @@ public class MainActivity extends AppCompatActivity implements TreinoAdapter.OnT
         txtBoasVindas = findViewById(R.id.txtBoasVindas);
         txtEmpty = findViewById(R.id.txtEmptyTreinos);
         RecyclerView recyclerView = findViewById(R.id.recyclerTreinos);
-        Button btnObjetivos = findViewById(R.id.btnObjetivos);
-        Button btnProgresso = findViewById(R.id.btnProgresso);
         FloatingActionButton fabAdicionar = findViewById(R.id.fabAdicionarTreino);
 
         treinoAdapter = new TreinoAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(treinoAdapter);
 
-        btnObjetivos.setOnClickListener(v -> startActivity(new Intent(this, ObjetivosActivity.class)));
-        btnProgresso.setOnClickListener(v -> startActivity(new Intent(this, ProgressoActivity.class)));
         fabAdicionar.setOnClickListener(v ->
                 treinoLauncher.launch(new Intent(this, CadastroTreinoActivity.class)));
 
@@ -90,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements TreinoAdapter.OnT
             } else if (itemId == R.id.nav_progresso) {
                 startActivity(new Intent(this, ProgressoActivity.class));
                 finish();
+                return true;
+            } else if (itemId == R.id.nav_logout) {
+                fazerLogout();
                 return true;
             }
             return false;
@@ -129,8 +127,19 @@ public class MainActivity extends AppCompatActivity implements TreinoAdapter.OnT
     }
 
     private void redirecionarLogin() {
-        startActivity(new Intent(this, LoginActivity.class));
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
+    }
+
+    private void fazerLogout() {
+        SharedPreferences preferences = getSharedPreferences(LoginActivity.PREFS_NAME, MODE_PRIVATE);
+        preferences.edit()
+                .remove(LoginActivity.KEY_USER_ID)
+                .remove(LoginActivity.KEY_USER_EMAIL)
+                .apply();
+        redirecionarLogin();
     }
 
     @Override

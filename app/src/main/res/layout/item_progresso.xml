@@ -14,7 +14,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="18dp">
 
@@ -32,50 +31,61 @@
                 android:contentDescription="@string/progresso"
                 android:src="@drawable/ic_chart_bar"
                 app:tint="@color/blue_primary_dark" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtDataRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtPesoProgresso"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:textColor="@color/gray_text"
-                android:textSize="14sp" />
+                android:textColor="@color/blue_primary_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtDetalhesProgresso"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/bg_secondary_chip"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:textColor="@color/blue_primary_dark"
+                android:textColor="@color/gray_text"
                 android:textSize="13sp" />
-        </FrameLayout>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtDataRegistro"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginStart="8dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/btnEditarProgresso"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/acao_editar"
-            android:src="@drawable/ic_edit" />
+            <ImageButton
+                android:id="@+id/btnEditarProgresso"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/acao_editar"
+                android:src="@drawable/ic_edit" />
 
-        <ImageButton
-            android:id="@+id/btnExcluirProgresso"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/acao_excluir"
-            android:src="@drawable/ic_delete" />
+            <ImageButton
+                android:id="@+id/btnExcluirProgresso"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/acao_excluir"
+                android:src="@drawable/ic_delete" />
+        </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

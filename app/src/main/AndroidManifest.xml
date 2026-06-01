@@ -13,25 +13,30 @@
         android:theme="@style/Theme.FitTrack">
         <activity
             android:name=".CadastroExercicioActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ExerciciosActivity"
             android:exported="false" />
         <activity
             android:name=".CadastroTreinoActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CadastroUsuarioActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CadastroObjetivoActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ObjetivosActivity"
             android:exported="false" />
         <activity
             android:name=".CadastroProgressoActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ProgressoActivity"
             android:exported="false" />
@@ -40,7 +45,8 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

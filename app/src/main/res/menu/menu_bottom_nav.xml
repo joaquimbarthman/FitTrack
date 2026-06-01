@@ -14,4 +14,8 @@
         android:id="@+id/nav_progresso"
         android:icon="@drawable/ic_chart_bar"
         android:title="@string/progresso" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="@string/sair" />
 </menu>

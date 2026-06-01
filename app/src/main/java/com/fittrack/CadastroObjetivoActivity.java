@@ -1,5 +1,6 @@
 package com.fittrack;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import com.fittrack.data.DatabaseHelper;
 import com.fittrack.data.FirebaseRepository;
@@ -26,6 +32,7 @@ public class CadastroObjetivoActivity extends AppCompatActivity {
     private EditText edtDataInicio;
     private EditText edtDataFim;
     private MaterialAutoCompleteTextView autoStatus;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private DatabaseHelper databaseHelper;
     private boolean modoEdicao;
     private int idObjetivo;
@@ -50,6 +57,9 @@ public class CadastroObjetivoActivity extends AppCompatActivity {
         edtDataFim = findViewById(R.id.edtDataFim);
         autoStatus = findViewById(R.id.autoStatusObjetivo);
         Button btnSalvar = findViewById(R.id.btnSalvarObjetivo);
+
+        setupDateField(edtDataInicio);
+        setupDateField(edtDataFim);
 
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
                 this,
@@ -78,9 +88,24 @@ public class CadastroObjetivoActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ProgressoActivity.class));
                 finish();
                 return true;
+            } else if (itemId == R.id.nav_logout) {
+                fazerLogout();
+                return true;
             }
             return false;
         });
+    }
+
+    private void fazerLogout() {
+        SharedPreferences preferences = getSharedPreferences(LoginActivity.PREFS_NAME, MODE_PRIVATE);
+        preferences.edit()
+                .remove(LoginActivity.KEY_USER_ID)
+                .remove(LoginActivity.KEY_USER_EMAIL)
+                .apply();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void preencherCampos() {
@@ -96,6 +121,34 @@ public class CadastroObjetivoActivity extends AppCompatActivity {
         edtDataInicio.setText(objetivo.getDataInicio());
         edtDataFim.setText(objetivo.getDataFim());
         autoStatus.setText(objetivo.getStatus(), false);
+    }
+
+    private void setupDateField(EditText editText) {
+        editText.setOnClickListener(v -> showDatePicker(editText));
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                showDatePicker(editText);
+            }
+        });
+    }
+
+    private void showDatePicker(EditText editText) {
+        Calendar calendar = Calendar.getInstance();
+        String currentValue = editText.getText().toString().trim();
+        if (!currentValue.isEmpty()) {
+            try {
+                calendar.setTime(dateFormat.parse(currentValue));
+            } catch (ParseException ignored) {
+            }
+        }
+
+        new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> editText.setText(String.format(Locale.getDefault(), "%02d/%02d/%04d", dayOfMonth, month + 1, year)),
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
     }
 
     private void salvarObjetivo() {

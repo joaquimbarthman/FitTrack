@@ -87,46 +87,6 @@
         </FrameLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/dashboardButtons"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/heroMain">
-
-        <Button
-            android:id="@+id/btnObjetivos"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_secondary_chip"
-            android:padding="14dp"
-            android:text="@string/objetivos"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnProgresso"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_secondary_chip"
-            android:padding="14dp"
-            android:text="@string/progresso"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-    </LinearLayout>
-
     <TextView
         android:id="@+id/txtEmptyTreinos"
         android:layout_width="0dp"
@@ -141,7 +101,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dashboardButtons" />
+        app:layout_constraintTop_toBottomOf="@id/heroMain" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerTreinos"
